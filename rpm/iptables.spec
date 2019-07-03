@@ -26,7 +26,7 @@ Requires:   %{name} = %{version}-%{release}
 %description devel
 iptables development headers and libraries.
 
-The iptc interface is upstream marked as not public. The interface is not 
+The iptc interface is upstream marked as not public. The interface is not
 stable and may change with every new version. It is therefore unsupported.
 
 
@@ -39,7 +39,7 @@ Requires:   %{name} = %{version}-%{release}
 The iptables package contains IPv6 (the next version of the IP
 protocol) support for iptables. Iptables controls the Linux kernel
 network packet filtering code, allowing you to set up firewalls and IP
-masquerading. 
+masquerading.
 
 Install iptables-ipv6 if you need to set up firewalling for your
 network and you are using ipv6.
@@ -59,7 +59,7 @@ Man pages for %{name}.
 
 %build
 ./autogen.sh
-CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" ./configure --enable-devel --prefix=%{_prefix} --bindir=/bin --sbindir=/sbin --with-kernel=/usr --with-kbuild=/usr --with-ksource=/usr --disable-nftables
+CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" ./configure --enable-devel --prefix=%{_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --with-kernel=/usr --with-kbuild=/usr --with-ksource=/usr --disable-nftables
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
@@ -90,7 +90,6 @@ install -c -m 755 ip6tables-config %{buildroot}/etc/sysconfig/ip6tables-config
 mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
 install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} INCOMPATIBILITIES
 
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -99,9 +98,9 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} INCOMPATIBILITIES
 %defattr(-,root,root,-)
 %license COPYING
 %config(noreplace) %attr(0600,root,root) /etc/sysconfig/iptables-config
-/sbin/iptables*
-/sbin/xtables-legacy-multi
-/bin/iptables-xml
+%{_sbindir}/iptables*
+%{_sbindir}/xtables-legacy-multi
+%{_bindir}/iptables-xml
 %dir %{_libdir}/xtables
 %{_libdir}/xtables/libipt*
 %{_libdir}/xtables/libxt*
@@ -127,7 +126,7 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} INCOMPATIBILITIES
 %files ipv6
 %defattr(-,root,root,-)
 %config(noreplace) %attr(0600,root,root) /etc/sysconfig/ip6tables-config
-/sbin/ip6tables*
+%{_sbindir}/ip6tables*
 %{_libdir}/xtables/libip6t*
 
 %files doc

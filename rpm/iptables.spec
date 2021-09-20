@@ -1,8 +1,7 @@
 Name:       iptables
 Summary:    Tools for managing Linux kernel packet filtering capabilities
-Version:    1.8.2
+Version:    1.8.7
 Release:    1
-Group:      System/Base
 License:    GPLv2
 URL:        http://www.netfilter.org/
 Source0:    http://www.netfilter.org/projects/iptables/files/%{name}-%{version}.tar.bz2
@@ -20,7 +19,6 @@ you should install this package.
 
 %package devel
 Summary:    Development package for iptables
-Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
@@ -32,7 +30,6 @@ stable and may change with every new version. It is therefore unsupported.
 
 %package ipv6
 Summary:    IPv6 support for iptables
-Group:      System/Base
 Requires:   %{name} = %{version}-%{release}
 
 %description ipv6
@@ -47,7 +44,6 @@ network and you are using ipv6.
 
 %package doc
 Summary:   Documentation for %{name}
-Group:     Documentation
 Requires:  %{name} = %{version}-%{release}
 
 %description doc
@@ -134,8 +130,4 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} INCOMPATIBILITIES
 %defattr(-,root,root,-)
 %{_mandir}/man*/%{name}*
 %{_mandir}/man8/ip6tables*
-%{_mandir}/man8/xtables-legacy.*
-%exclude %{_mandir}/man8/xtables-monitor.*
-%exclude %{_mandir}/man8/xtables-nft.*
-%exclude %{_mandir}/man8/xtables-translate.*
 %{_docdir}/%{name}-%{version}

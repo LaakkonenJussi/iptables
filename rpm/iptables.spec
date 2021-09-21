@@ -3,8 +3,8 @@ Summary:    Tools for managing Linux kernel packet filtering capabilities
 Version:    1.8.7
 Release:    1
 License:    GPLv2
-URL:        http://www.netfilter.org/
-Source0:    http://www.netfilter.org/projects/iptables/files/%{name}-%{version}.tar.bz2
+URL:        http://www.netfilter.org/projects/iptables
+Source0:    %{name}-%{version}.tar.bz2
 Source1:    iptables-config
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -45,28 +45,36 @@ network and you are using ipv6.
 %package doc
 Summary:   Documentation for %{name}
 Requires:  %{name} = %{version}-%{release}
+BuildArch: noarch
 
 %description doc
 Man pages for %{name}.
 
 
 %prep
-%setup -q -n %{name}-%{version}/%{name}
+%autosetup -p1 -n %{name}-%{version}/%{name}
 
 %build
 ./autogen.sh
-CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" ./configure --enable-devel --prefix=%{_prefix} --bindir=/bin --sbindir=/sbin --with-kernel=/usr --with-kbuild=/usr --with-ksource=/usr --disable-nftables --libdir=%{_libdir} --with-xtlibdir=%{_libdir}/xtables
+CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" \
+%configure --enable-devel \
+    --prefix=%{_prefix} \
+    --bindir=/bin \
+    --sbindir=/sbin \
+    --with-kernel=/usr \
+    --with-kbuild=/usr \
+    --with-ksource=/usr \
+    --disable-nftables \
+    --libdir=%{_libdir} \
+    --with-xtlibdir=%{_libdir}/xtables
+
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
-make %{?_smp_mflags}
+%make_build
 
 %install
-rm -rf %{buildroot}
 %make_install
-
-# remove la file(s)
-rm -f %{buildroot}/%{_lib}/*.la
 
 # install ip*tables.h header files
 install -m 644 include/ip*tables.h %{buildroot}%{_includedir}/

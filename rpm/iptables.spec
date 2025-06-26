@@ -1,15 +1,18 @@
 Name:       iptables
 Summary:    Tools for managing Linux kernel packet filtering capabilities
-Version:    1.8.10
+Version:    1.8.11
 Release:    1
 License:    GPLv2
 URL:        http://www.netfilter.org/projects/iptables
 Source0:    %{name}-%{version}.tar.bz2
 Source1:    iptables-config
+Patch1:     iptables-1.8.11-fix-interface-comparisons.patch
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
+Requires:   libnetfilter_conntrack
 BuildRequires:  kernel-headers
 BuildRequires:  autoconf, automake, libtool
+BuildRequires:  libnetfilter_conntrack-devel
 
 %description
 The iptables utility controls the network packet filtering code in the
@@ -104,6 +107,9 @@ install -c -m 755 ip6tables-config %{buildroot}/etc/sysconfig/ip6tables-config
 %{_libdir}/xtables/libxt*
 %{_libdir}/libip*tc.so.*
 %{_libdir}/libxtables.so.*
+# Exclude nftables tools built with 1.8.11 even with ntfables being disabled
+%exclude /sbin/nfnl_osf
+%exclude %{_datadir}/xtables/pf.os
 
 %files devel
 %defattr(-,root,root,-)
@@ -129,4 +135,5 @@ install -c -m 755 ip6tables-config %{buildroot}/etc/sysconfig/ip6tables-config
 %defattr(-,root,root,-)
 %{_mandir}/man*/%{name}*
 %{_mandir}/man8/ip6tables*
+%exclude %{_mandir}/man8/nfnl_osf*
 %{_datadir}/xtables/iptables.xslt
